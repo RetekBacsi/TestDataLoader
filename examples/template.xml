@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+  <!-- both users below will have email encoding, language locale key, locale sid key and timezone set from the template -->
+  <User profile="Standard User" template="true" abstract="true">
+    <EmailEncodingKey>UTF-8</EmailEncodingKey>
+    <LanguageLocaleKey>en_US</LanguageLocaleKey>
+    <LocaleSidKey>en_US</LocaleSidKey>
+    <TimeZoneSidKey>America/Los_Angeles</TimeZoneSidKey>
+  </User>
+  <User pk="user1">
+    <LastName>Doe</LastName>
+    <FirstName>Jane</FirstName>
+    <Email>janedoe@example.com</Email>
+    <UserName>janedoe@example.com</UserName>
+    <Alias>jd123</Alias>
+    <CommunityNickname>jd123</CommunityNickname>
+    <IsActive>true</IsActive>
+  </User>
+  <User pk="user2">
+    <LastName>Doe</LastName>
+    <FirstName>Johm</FirstName>
+    <Email>johndoe@example.com</Email>
+    <UserName>johndoe@example.com</UserName>
+    <Alias>jd456</Alias>
+    <CommunityNickname>jd456</CommunityNickname>
+    <IsActive>true</IsActive>
+  </User>
+</dataset>
+

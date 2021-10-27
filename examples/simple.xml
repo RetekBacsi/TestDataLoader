@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <Account pk="acme">
+        <Name>Hello</Name>
+        <Account_Custom_Field__c>CustomValue</Account_Custom_Field__c>
+    </Account>
+    <Contact>
+        <AccountId ref="acme"/>
+        <FirstName>John</FirstName>
+        <LastName>Doe</LastName>
+        <Email>johndoe@example.com</Email>
+    </Contact>
+</dataset>
