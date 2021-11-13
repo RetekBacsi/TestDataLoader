@@ -18,6 +18,30 @@ The code is already used in a few complex projects and saved us a lot of time.
 
 (Also it is possible  to delegate test data creation to non-developers, which can be a great help for regressions)
 
+## Why use this over Test.loadData?
+
+1. Organize test data by the function, not by data types. You can have a single static resouce per test class where you 
+  set up a complex scenario with different object types. It is easier to understand than several different fiels.
+
+2. Refer profiles/roles/recordtypes etc without hardcoding ids (which can break between sandboxes)
+
+3. Control over Date values. Let's say you have a requirement to do something with records where a date custom field's 
+  value in the next 7 days. Here you can set it to "TODAY + 3 DAYS", while with the standard loader the hard-coded 
+  values will expire and your tests will fail after a time.
+
+4. Circular dependencies. Let's say you have an Account, a list of Contacts, and the Account has a "Main Contact" 
+  lookup. With the standard loader this is not possible.
+
+5. The tool will figure out the dependency order*. You can define your data in any order rather than keeping in mind 
+  what needs to be loaded first. This results in more readable test data in my experience. 
+  (* for circular references it requires hints)
+
+6. No need to keep the same type of objects together. You can define the test data in an order that expresses your 
+  scenario. The library will group the objects and do only one insert per object type.
+
+7. It's easy to find a specific test record. By using the PK attribute and the `getIdForPk` method you can get 
+  the Id of a given without running queries. See example below.
+
 ## How to use
 - Add the above code to your org.
 - Create an XML file with your data (see examples below), and upload it as a static resource.
@@ -126,7 +150,7 @@ example:
             <IsActive>true</IsActive>
           </PricebookEntry>
         ````
-    - Specifying dates/date times - Dates/DateTimes are parsed by the standard `Date.valueOf` or `DateTime.valueOf` function accordingly. 
+    - Specifying dates/date times - Dates/DateTimes are parsed by the standard `Date.valueOf` or `DateTime.valueOf` function accordingly. For DateTime values there is a fallback for JSON datetime format.
     However, there is a way to use date expressions to specify relative dates. This can be useful if you want to make sure some date is in the future/past at the time of the test.
     The expression syntax is "today (+|-) X (day(s)|month(s)|year(s))"
       ```` xml
