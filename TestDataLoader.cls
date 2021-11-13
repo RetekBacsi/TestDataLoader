@@ -443,7 +443,9 @@ public with sharing class TestDataLoader {
     for (integer x = 0; x < source.size();x++){
       MockObject so = source.get(x);
       if (!so.isFinalized){
-        so.setField('Id', soList.get(i).Id);
+        Id oid = soList.get(i).Id;
+        if (so.createdDate != null) Test.setCreatedDate(oid, so.createdDate);
+        so.setField('Id', oid);
         if (so.pk != null) resolveDeps(so);
         i++;
       }
@@ -561,6 +563,7 @@ public with sharing class TestDataLoader {
     private Set<String> selfRefs = new Set<String>();
     private Set<String> deferredRefs = new Set<String>();
     private Set<String> userRefs = new Set<String>();
+    DateTime createdDate;
     String type {get;set;}
     String pk {get;set;}
     String recordType {get;set;}
@@ -603,7 +606,9 @@ public with sharing class TestDataLoader {
     }
 
     void setField(String field,String value){
-      fields.put(field,value);
+      if ('createddate'.equals(field.toLowerCase())) {
+        this.createdDate = TestDataLoader.parseDateTime(value);
+      } else fields.put(field,value);
       selfRefs.remove(field);
     }
 
@@ -667,9 +672,21 @@ public with sharing class TestDataLoader {
     throw new TestDataLoaderException('Unknown unit: ' + unit + ' in date expression' + expression);
   }
 
+  private static DateTime parseDateTimeWithJSONFallback(String value){
+    try {
+      return DateTime.valueOf(value);
+    } catch (TypeException e) {
+      String dummyJSON = '{"a" : "' + value + '"}';  
+      JSONParser parser = JSON.createParser(dummyJSON);
+      parser.nextToken();
+      parser.nextValue();
+      return parser.getDateTimeValue();
+    }
+  }
+
   public static DateTime parseDateTime(String expression){
     Matcher m = expressionPattern.matcher(expression.trim().toLowerCase());
-    if (!m.matches()) return DateTime.valueOf(expression);
+    if (!m.matches()) return parseDateTimeWithJSONFallback(expression);
     String sign = m.group(1);
     Integer value = Integer.valueOf(m.group(2));
     if (sign == '-') value = -value;
