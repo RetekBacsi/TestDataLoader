@@ -163,7 +163,7 @@ example:
     
 ## Public Methods
 - `getIdForPk(String pk)` - returns the Id for a given PK. Only valid after load/finish.
-- `load(String name)` - Loads and persists a data file. The most used method. A shortcut for `init();load(file);finish();`
+- `load(String name)` - Loads and persists a data file. The most used method. A shortcut for `init();parse(file);finish();`
 - `append(String name)` - use this to load an extra data file, after loading at least one. This can be used if you need
 refer values created by triggers/automations because of the previous loads.
 - `init()` - initializes internal structures. Only needed when loading multiple files
